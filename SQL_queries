@@ -1,0 +1,84 @@
+CREATE DATABASE Video_game_parlour;
+use Video_game_parlour;
+CREATE TABLE Memberships (
+    MembershipID INT PRIMARY KEY,
+    Type VARCHAR(20),
+    Fee DECIMAL(10,2)
+);
+CREATE TABLE Customers (
+    CustomerID INT PRIMARY KEY,
+    FirstName VARCHAR(30),
+    LastName VARCHAR(30),
+    Address VARCHAR(100),
+    MembershipID INT,
+    JoinDate DATE,
+    DOB DATE,
+    FOREIGN KEY (MembershipID) REFERENCES Memberships(MembershipID)
+);
+
+CREATE TABLE Staff (
+    StaffID INT PRIMARY KEY,
+    Name VARCHAR(50)
+);
+
+CREATE TABLE Sessions (
+    SessionID INT PRIMARY KEY,
+    SessionDay VARCHAR(20),
+    StartTime TIME,
+    EndTime TIME,
+    Type VARCHAR(30),
+    Floor INT,
+    Price DECIMAL(10,2)
+);
+
+CREATE TABLE Session_Staff (
+    SessionID INT,
+    StaffID INT,
+    Role VARCHAR(20),
+    PRIMARY KEY (SessionID, StaffID),
+    FOREIGN KEY (SessionID) REFERENCES Sessions(SessionID),
+    FOREIGN KEY (StaffID) REFERENCES Staff(StaffID)
+);
+
+CREATE TABLE Bookings (
+    BookingID INT PRIMARY KEY,
+    CustomerID INT,
+    SessionID INT,
+    BookingDate DATE,
+    Member CHAR(1),
+    Fee DECIMAL(10,2),
+    Prepaid CHAR(1),
+    FOREIGN KEY (CustomerID) REFERENCES Customers(CustomerID),
+    FOREIGN KEY (SessionID) REFERENCES Sessions(SessionID)
+);
+
+CREATE TABLE Arcade_Machines (
+    MachineID INT PRIMARY KEY,
+    GameName VARCHAR(50),
+    Year INT,
+    Floor INT
+);
+
+CREATE TABLE Consoles (
+    ConsoleID INT PRIMARY KEY,
+    Name VARCHAR(50),
+    PEGI VARCHAR(10),
+    ConsoleQty INT
+);
+
+CREATE TABLE Console_Games (
+    ConsoleID INT,
+    GameName VARCHAR(50),
+    PRIMARY KEY (ConsoleID, GameName),
+    FOREIGN KEY (ConsoleID) REFERENCES Consoles(ConsoleID)
+);
+
+CREATE TABLE Session_Consoles (
+    SessionID INT,
+    ConsoleID INT,
+    Date DATE,
+    Quantity INT,
+    PRIMARY KEY (SessionID, ConsoleID),
+    FOREIGN KEY (SessionID) REFERENCES Sessions(SessionID),
+    FOREIGN KEY (ConsoleID) REFERENCES Consoles(ConsoleID)
+);
